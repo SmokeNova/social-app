@@ -16,11 +16,10 @@ import { Button } from "../ui/button";
 
 interface Props {
   name: string;
-  email: string;
   image: string;
 }
 
-export default function UserDropdown({ name, email, image }: Props) {
+export default function UserDropdown({ name, image }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

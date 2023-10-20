@@ -13,7 +13,7 @@ export default function Navbar() {
   return (
     <header>
       <nav className="flex justify-between py-3 px-10 items-center shadow-lg">
-        <div className="flex gap-3 items-center grow">
+        <div className="flex gap-5 items-center grow">
           <Link href="/" className="text-4xl font-semibold text-blue-600">
             LOGO
           </Link>
@@ -27,7 +27,6 @@ export default function Navbar() {
         {session ? (
           <UserDropdown
             name={session.user?.name ?? ""}
-            email={session.user?.email ?? ""}
             image={session.user?.image ?? ""}
           />
         ) : (
