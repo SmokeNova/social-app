@@ -1,6 +1,9 @@
+import { CreatePost } from "@/components";
 
-export default function CreatePost() {
+export default function CreatePostPage() {
     return (
-        <div>Create Post page</div>
+        <section id="create-post-form" className="flex justify-center items-center min-h-full">
+            <CreatePost />
+        </section>
     )
 }

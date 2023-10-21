@@ -16,7 +16,6 @@ const PostSchema = new mongoose.Schema({
     ref: "User",
     require: true,
   },
-  creatorAvatar: { type: String, require: true },
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
