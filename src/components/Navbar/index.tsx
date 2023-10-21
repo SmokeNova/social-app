@@ -8,7 +8,7 @@ import { LogInIcon } from "lucide-react";
 import { UserDropdown } from "..";
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
   return (
     <header>
@@ -24,20 +24,21 @@ export default function Navbar() {
           />
         </div>
 
-        {session ? (
-          <UserDropdown
-            name={session.user?.name ?? ""}
-            image={session.user?.image ?? ""}
-          />
-        ) : (
-          <Button
-            onClick={() => signIn()}
-            className="bg-blue-600 hover:bg-blue-800"
-          >
-            <LogInIcon className="mr-2 w-5 h-5" />
-            Sign In
-          </Button>
-        )}
+        {status !== "loading" &&
+          (session ? (
+            <UserDropdown
+              name={session.user?.name ?? ""}
+              image={session.user?.image ?? ""}
+            />
+          ) : (
+            <Button
+              onClick={() => signIn()}
+              className="bg-blue-600 hover:bg-blue-800"
+            >
+              <LogInIcon className="mr-2 w-5 h-5" />
+              Sign In
+            </Button>
+          ))}
       </nav>
     </header>
   );
