@@ -30,6 +30,17 @@ const PostSchema = new mongoose.Schema({
   ],
 });
 
+export interface IPost {
+  text: string;
+  media: string;
+  hashTags: string[];
+  creator: mongoose.Schema.Types.ObjectId;
+  likes: mongoose.Schema.Types.ObjectId[]; 
+  comments: mongoose.Schema.Types.ObjectId[];
+  createdAt: Date;
+  updatedAt: Date 
+}
+
 const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);
 
 export default Post;

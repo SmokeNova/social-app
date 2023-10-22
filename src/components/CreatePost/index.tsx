@@ -36,7 +36,7 @@ export default function CreatePost() {
       }
       )
     },
-    onSuccess: () => router.push("/"),
+    onSuccess: () => router.push("/p/profile"),
   });
   const form = useForm<z.infer<typeof postSchema>>({
     resolver: zodResolver(postSchema),
