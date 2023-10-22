@@ -21,7 +21,7 @@ export default function RootLayout({
         <div className="w-screen h-screen flex flex-col overflow-x-hidden">
           <Provider>
             <Navbar />
-            <main className="grow ">{children}</main>
+            <main className="grow">{children}</main>
           </Provider>
         </div>
       </body>
