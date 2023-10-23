@@ -16,6 +16,7 @@ const PostSchema = new mongoose.Schema({
     ref: "User",
     require: true,
   },
+  creatorAvatar: String,
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -31,10 +32,13 @@ const PostSchema = new mongoose.Schema({
 });
 
 export interface IPost {
+  _id: mongoose.Schema.Types.ObjectId,
   text: string;
   media: string;
   hashTags: string[];
   creator: mongoose.Schema.Types.ObjectId;
+  creatorAvatar: string;
+  creatorEmail: string;
   likes: mongoose.Schema.Types.ObjectId[]; 
   comments: mongoose.Schema.Types.ObjectId[];
   createdAt: Date;

@@ -32,7 +32,7 @@ export default function CreatePost() {
       console.log("ran")
       return fetch("/api/post", {
         method: "POST",
-        body: JSON.stringify({...values, email: session?.user?.email})
+        body: JSON.stringify({...values, email: session?.user?.email, avatar: session?.user?.image})
       }
       )
     },

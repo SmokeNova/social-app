@@ -1,13 +1,21 @@
+import { Posts } from "@/components";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { authOptions } from "@/lib/authOptions";
 import Post, { IPost } from "@/lib/models/post.model";
 import { connectToDB } from "@/lib/mongoose";
 import { getServerSession } from "next-auth";
 
+const getPostsByEmail = async (email: string) => {
+  await connectToDB();
+  const posts: IPost[] = await Post.find({ creatorEmail: email }).where("creatorEmail").equals(email).sort({
+    createdAt: "desc",
+  });
+  return posts;
+};
+
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
-  await connectToDB();
-  const posts: IPost[] = await Post.find({ email: session?.user?.email });
+  const posts = await getPostsByEmail(session?.user?.email ?? "");
 
   return (
     <>
@@ -23,6 +31,10 @@ export default async function ProfilePage() {
           </p>
         </div>
       </div>
+
+      <Posts posts={posts} />
     </>
   );
 }
+
+export const dynamic = 'force-dynamic'
