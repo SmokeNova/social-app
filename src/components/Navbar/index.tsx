@@ -25,7 +25,7 @@ export default function Navbar() {
         </div>
 
         {status !== "loading" &&
-          (session ? (
+          (session && session.user ? (
             <UserDropdown
               name={session.user?.name ?? ""}
               image={session.user?.image ?? ""}

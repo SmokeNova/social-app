@@ -36,7 +36,7 @@ export default function UserDropdown({ name, image }: Props) {
 
         <DropdownMenuItem>
           <Link
-            href="/profile"
+            href="/p/profile"
             className="flex items-center w-full justify-start"
           >
             <UserIcon className="mr-2 w-4 h-4" />
@@ -45,7 +45,7 @@ export default function UserDropdown({ name, image }: Props) {
         </DropdownMenuItem>
         <DropdownMenuItem>
           <Link
-            href="/profile/manage"
+            href="/p/profile/manage"
             className="flex items-center w-full justify-start"
           >
             <SettingsIcon className="mr-2 w-4 h-4" />

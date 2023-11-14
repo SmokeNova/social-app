@@ -17,6 +17,7 @@ const PostSchema = new mongoose.Schema({
     require: true,
   },
   creatorAvatar: String,
+  creatorEmail: String,
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
