@@ -20,28 +20,17 @@ import { useUploadThing } from '@/lib/uploadthing';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { Tags } from '..';
-import { useMutation } from '@tanstack/react-query';
+import { createPost } from '@/lib/actions/posts.actions';
+import { useToast } from '../ui/use-toast';
+import { useFormStatus } from 'react-dom';
 
 export default function CreatePost() {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [tag, setTag] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
+  const { pending } = useFormStatus();
+  const { toast } = useToast();
   const { data: session } = useSession();
-  const { mutateAsync: createPost } = useMutation({
-    mutationFn: async (values: z.infer<typeof postSchema>) => {
-      console.log('ran');
-      return fetch('/api/post', {
-        method: 'POST',
-        body: JSON.stringify({
-          ...values,
-          email: session?.user?.email,
-          avatar: session?.user?.image,
-        }),
-      });
-    },
-    onSuccess: () => router.push('/p/profile'),
-  });
   const form = useForm<z.infer<typeof postSchema>>({
     resolver: zodResolver(postSchema),
     defaultValues: {
@@ -52,7 +41,6 @@ export default function CreatePost() {
   const { startUpload } = useUploadThing('media');
 
   const handleSubmit = async (values: z.infer<typeof postSchema>) => {
-    setIsCreating(true);
     if (values.media) {
       const imageRes = await startUpload(files);
       console.log(imageRes);
@@ -60,8 +48,23 @@ export default function CreatePost() {
         values.media = imageRes[0].url;
       }
     }
-    await createPost(values);
-    setIsCreating(false);
+    const res = await createPost({
+      ...values,
+      name: session?.user?.name,
+      email: session?.user?.email,
+      avatar: session?.user?.image,
+    });
+    if (res.success) {
+      toast({
+        title: 'Post created successfully!',
+      });
+      router.push('/p/profile');
+    } else {
+      toast({
+        title: 'Something went wrong. Please try again.',
+        variant: 'destructive',
+      });
+    }
   };
 
   const handleImage = (
@@ -127,7 +130,7 @@ export default function CreatePost() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Post Tags</FormLabel>
-                <Tags tags={field.value} changeTags={field.onChange} />
+                <Tags editable tags={field.value} changeTags={field.onChange} />
                 <FormControl>
                   <Input
                     className='focus-visible:ring-0'
@@ -179,12 +182,12 @@ export default function CreatePost() {
           />
           <div className='flex justify-end'>
             <Button
-              disabled={isCreating}
+              disabled={pending}
               variant='primary'
               type='submit'
               className='text-right disabled:opacity-60 disabled:cursor-not-allowed'
             >
-              {isCreating ? 'Posting' : 'Confirm'}
+              {pending ? 'Posting' : 'Confirm'}
             </Button>
           </div>
         </form>

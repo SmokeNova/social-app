@@ -1,9 +1,11 @@
 import { Posts } from '@/components';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import { authOptions } from '@/lib/authOptions';
 import Post, { IPost } from '@/lib/models/post.model';
 import { connectToDB } from '@/lib/mongoose';
 import { getServerSession } from 'next-auth';
+import Link from 'next/link';
 
 const getPostsByEmail = async (email: string) => {
   await connectToDB();
@@ -20,7 +22,7 @@ export default async function ProfilePage() {
   return (
     <>
       <div className='flex flex-col items-center py-12 gap-10 text-slate-800 border-b border-b-slate-800/30'>
-        <Avatar className='scale-[2]'>
+        <Avatar className='scale-[2.5]'>
           <AvatarImage src={session?.user?.image ?? ''} />
           <AvatarFallback>{session?.user?.name?.at(0) ?? 'U'}</AvatarFallback>
         </Avatar>
@@ -30,11 +32,13 @@ export default async function ProfilePage() {
             email: <span className='text-blue-700'>{session?.user?.email}</span>
           </p>
         </div>
+
+        <Link href='/p/create-post'>
+          <Button variant='primary'>Create Post</Button>
+        </Link>
       </div>
 
       <Posts posts={posts} />
     </>
   );
 }
-
-export const dynamic = 'force-dynamic';

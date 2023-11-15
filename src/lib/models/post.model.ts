@@ -17,6 +17,7 @@ const PostSchema = new mongoose.Schema({
     require: true,
   },
   creatorAvatar: String,
+  creatorName: String,
   creatorEmail: String,
   likes: [
     {
@@ -40,6 +41,7 @@ export interface IPost {
   creator: mongoose.Schema.Types.ObjectId;
   creatorAvatar: string;
   creatorEmail: string;
+  creatorName: string;
   likes: mongoose.Schema.Types.ObjectId[]; 
   comments: mongoose.Schema.Types.ObjectId[];
   createdAt: Date;
