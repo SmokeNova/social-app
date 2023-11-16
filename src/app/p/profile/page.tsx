@@ -9,9 +9,10 @@ import Link from 'next/link';
 
 const getPostsByEmail = async (email: string) => {
   await connectToDB();
-  const posts: IPost[] = await Post.find({ creatorEmail: email }).sort({
+  const posts: IPost[] = await Post.find().sort({
     createdAt: 'desc',
   });
+  // const postIds = posts.map(post => post._id);
   return posts;
 };
 

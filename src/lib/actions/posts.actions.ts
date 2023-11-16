@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import Post from '../models/post.model';
+import Post, { IPost } from '../models/post.model';
 import User from '../models/user.model';
 import { connectToDB } from '../mongoose';
 import { postSchema } from '../validations/post';
@@ -15,7 +15,7 @@ export async function createPost(data: any) {
         email: z.string().email(),
         avatar: z.string().url(),
       })
-      .parse(data);
+      .parse(data)
     await connectToDB();
     const user = await User.findOne({ email: values.email });
     const post = await Post.create({
@@ -33,5 +33,30 @@ export async function createPost(data: any) {
     return { success: true };
   } catch (error) {
     return { success: false, error };
+  }
+}
+
+export async function likePost({
+  email,
+  post,
+}: {
+  email: string;
+  post: IPost;
+}) {
+  try {
+    await connectToDB();
+    let validatedEmail = z.string().email().parse(email);
+    const user = await User.findOne({ email: validatedEmail });
+    const userId = user?._id;
+    if (!userId && typeof userId !== 'string') {
+      throw new Error();
+    }
+    post.likes.push(userId);
+    post.likesCount += 1;
+    await post.save();
+    revalidatePath('/p/profile');
+    return { success: true };
+  } catch (error) {
+    console.log(error);
   }
 }

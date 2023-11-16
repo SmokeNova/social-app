@@ -5,12 +5,15 @@ import Link from 'next/link';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import Image from 'next/image';
-import PostModel from '@/lib/models/post.model';
 import { Tag } from '..';
+import PostActions from '../PostActions';
+import { likePost } from '@/lib/actions/posts.actions';
+import { connectToDB } from '@/lib/mongoose';
+import User from '@/lib/models/user.model';
+import { revalidatePath } from 'next/cache';
+import * as z from 'zod';
 
 export default async function Post({ post }: { post: IPost }) {
-  const liked = Boolean(await PostModel.findOne({likes: {$in: [post._id]}}))
-  console.log(liked);
 
   return (
     <div className='flex flex-col gap-2 px-4'>
@@ -37,7 +40,7 @@ export default async function Post({ post }: { post: IPost }) {
 
       <Link
         href={`/posts/${post.creator.toString()}`}
-        className='flex flex-col gap-2'
+        className='flex flex-col gap-2 p-1 hover:bg-sky-100/60 rounded'
       >
         <div>
           <p>{post.text}</p>
@@ -58,6 +61,10 @@ export default async function Post({ post }: { post: IPost }) {
           </div>
         ) : null}
       </Link>
+
+      <PostActions
+        likesCount={post.likesCount}
+      />
     </div>
   );
 }

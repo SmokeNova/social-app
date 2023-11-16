@@ -19,6 +19,7 @@ const PostSchema = new mongoose.Schema({
   creatorAvatar: String,
   creatorName: String,
   creatorEmail: String,
+  likesCount: Number,
   likes: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -42,10 +43,12 @@ export interface IPost {
   creatorAvatar: string;
   creatorEmail: string;
   creatorName: string;
-  likes: mongoose.Schema.Types.ObjectId[]; 
+  likes: mongoose.Schema.Types.ObjectId[];
+  likesCount: number;
   comments: mongoose.Schema.Types.ObjectId[];
   createdAt: Date;
-  updatedAt: Date 
+  updatedAt: Date;
+  save: () => Promise<void>;
 }
 
 const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);
