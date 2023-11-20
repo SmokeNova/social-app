@@ -48,7 +48,7 @@ export interface IPost {
   comments: mongoose.Schema.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
-  save: () => Promise<void>;
+  hasLiked: boolean;
 }
 
 const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);

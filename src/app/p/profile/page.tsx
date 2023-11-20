@@ -3,16 +3,30 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { authOptions } from '@/lib/authOptions';
 import Post, { IPost } from '@/lib/models/post.model';
+import User from '@/lib/models/user.model';
 import { connectToDB } from '@/lib/mongoose';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 
 const getPostsByEmail = async (email: string) => {
   await connectToDB();
-  const posts: IPost[] = await Post.find().sort({
+  let posts: IPost[] = await Post.find({ creatorEmail: email }).sort({
     createdAt: 'desc',
   });
-  // const postIds = posts.map(post => post._id);
+  const postIds = posts.map((post) => post._id);
+  const { _id: userId } = await User.findOne({ email });
+  const likedPosts = await Post.find({
+    _id: { $in: postIds },
+    likes: userId,
+  });
+  const likedPostIds = new Set(likedPosts.map((post) => post._id.toString()));
+  // stringifying and parsing is done to convert posts to vanilla js objects because mongoose doesn't allow properties that are not defined in the schema
+  posts = JSON.parse(JSON.stringify(posts));
+
+  posts = posts.map((post) => ({
+    ...post,
+    hasLiked: likedPostIds.has(post._id.toString()),
+  }));
   return posts;
 };
 

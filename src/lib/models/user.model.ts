@@ -4,25 +4,35 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, require: true },
   email: { type: String, require: true, unique: true },
   image: { type: String },
-  Followers: [
+  followers: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  Followings: [
+  followings: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
   ],
-  Posts: [
+  posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post",
     },
   ],
 });
+
+export interface IUserDB {
+  _id: mongoose.Schema.Types.ObjectId,
+  username: string;
+  email: string;
+  image: string;
+  followers: mongoose.Schema.Types.ObjectId[],
+  followings: mongoose.Schema.Types.ObjectId[],
+  posts: mongoose.Schema.Types.ObjectId[],
+}
 
 const User = mongoose.models.User || mongoose.model("User", UserSchema);
 

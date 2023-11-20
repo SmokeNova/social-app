@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import { IPost } from '@/lib/models/post.model';
 import Link from 'next/link';
@@ -7,14 +7,8 @@ import { Button } from '../ui/button';
 import Image from 'next/image';
 import { Tag } from '..';
 import PostActions from '../PostActions';
-import { likePost } from '@/lib/actions/posts.actions';
-import { connectToDB } from '@/lib/mongoose';
-import User from '@/lib/models/user.model';
-import { revalidatePath } from 'next/cache';
-import * as z from 'zod';
 
 export default async function Post({ post }: { post: IPost }) {
-
   return (
     <div className='flex flex-col gap-2 px-4'>
       <div className='flex gap-1/2 items-center'>
@@ -64,6 +58,8 @@ export default async function Post({ post }: { post: IPost }) {
 
       <PostActions
         likesCount={post.likesCount}
+        postId={post._id.toString()}
+        hasLiked={post.hasLiked}
       />
     </div>
   );

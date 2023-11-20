@@ -6,6 +6,7 @@ import CreatePost from './CreatePost';
 import Tags from './Tags';
 import Tag from './Tag';
 import Posts from './Posts';
+import UserContextProvider, { useUser } from './UserContextProvider';
 
 export {
   Provider,
@@ -16,4 +17,6 @@ export {
   Tags,
   Posts,
   Tag,
+  UserContextProvider,
+  useUser,
 };

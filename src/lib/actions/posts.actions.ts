@@ -1,7 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import Post, { IPost } from '../models/post.model';
+import Post from '../models/post.model';
 import User from '../models/user.model';
 import { connectToDB } from '../mongoose';
 import { postSchema } from '../validations/post';
@@ -15,7 +15,7 @@ export async function createPost(data: any) {
         email: z.string().email(),
         avatar: z.string().url(),
       })
-      .parse(data)
+      .parse(data);
     await connectToDB();
     const user = await User.findOne({ email: values.email });
     const post = await Post.create({
@@ -26,6 +26,7 @@ export async function createPost(data: any) {
       creatorName: values.name,
       creatorEmail: values.email,
       creatorAvatar: values.avatar,
+      likesCount: 0,
     });
     if (!post) throw new Error('Something went wrong!');
     console.log('created!');
@@ -37,26 +38,31 @@ export async function createPost(data: any) {
 }
 
 export async function likePost({
-  email,
-  post,
+  userId,
+  postId,
+  hasLiked,
 }: {
-  email: string;
-  post: IPost;
+  userId: string;
+  postId: string;
+  hasLiked: boolean;
 }) {
   try {
     await connectToDB();
-    let validatedEmail = z.string().email().parse(email);
-    const user = await User.findOne({ email: validatedEmail });
-    const userId = user?._id;
-    if (!userId && typeof userId !== 'string') {
-      throw new Error();
+    if (hasLiked) {
+      await Post.updateOne(
+        { _id: postId },
+        { $pull: { likes: userId }, $inc: { likesCount: -1 } }
+      );
+    } else {
+      await Post.updateOne(
+        { _id: postId },
+        { $push: { likes: userId }, $inc: { likesCount: 1 } }
+      );
     }
-    post.likes.push(userId);
-    post.likesCount += 1;
-    await post.save();
     revalidatePath('/p/profile');
     return { success: true };
   } catch (error) {
     console.log(error);
+    return { success: false };
   }
 }
