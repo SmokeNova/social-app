@@ -22,13 +22,12 @@ import { useSession } from 'next-auth/react';
 import { Tags } from '..';
 import { createPost } from '@/lib/actions/posts.actions';
 import { useToast } from '../ui/use-toast';
-import { useFormStatus } from 'react-dom';
 
 export default function CreatePost() {
   const router = useRouter();
   const [files, setFiles] = useState<File[]>([]);
   const [tag, setTag] = useState('');
-  const { pending } = useFormStatus();
+  const [pending, setPending] = useState(false);
   const { toast } = useToast();
   const { data: session } = useSession();
   const form = useForm<z.infer<typeof postSchema>>({
@@ -41,6 +40,7 @@ export default function CreatePost() {
   const { startUpload } = useUploadThing('media');
 
   const handleSubmit = async (values: z.infer<typeof postSchema>) => {
+    setPending(true);
     if (values.media) {
       const imageRes = await startUpload(files);
       console.log(imageRes);
@@ -54,6 +54,7 @@ export default function CreatePost() {
       email: session?.user?.email,
       avatar: session?.user?.image,
     });
+    setPending(false);
     if (res.success) {
       toast({
         title: 'Post created successfully!',
