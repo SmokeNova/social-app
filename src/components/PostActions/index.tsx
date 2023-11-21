@@ -2,7 +2,7 @@
 
 import { HeartIcon, MessageCircleIcon } from 'lucide-react';
 import { useOptimistic, startTransition } from 'react';
-import { useUser } from '..';
+import { CommentModal, useUser } from '..';
 import { likePost } from '@/lib/actions/posts.actions';
 import { useToast } from '../ui/use-toast';
 
@@ -53,12 +53,10 @@ export default function PostActions({ hasLiked, postId, likesCount }: Props) {
           />
           {optimisticLikes.likesCount}
         </button>
-        <button
-          type='button'
-          className='outline-none border-none p-3 rounded-full bg-transparent hover:bg-cyan-600/20'
-        >
+
+        <CommentModal>
           <MessageCircleIcon className='w-5 h-5 stroke-slate-500 hover:stroke-cyan-600' />
-        </button>
+        </CommentModal>
       </form>
     </div>
   );

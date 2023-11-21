@@ -1,23 +1,41 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const CommentSchema = new mongoose.Schema({
-    text: String,
-    creator: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+  text: String,
+  createdAt: { type: Date, default: Date.now },
+  edited: Boolean,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  authorName: String,
+  authorImage: String,
+  post: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Post',
+  },
+  likesCount: Number,
+  likes: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
     },
-    post: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Post",
-    },
-    likes: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "User"
-        }
-    ]
-})
+  ],
+});
 
-const Comment = mongoose.models.Comment || mongoose.model("Comment", CommentSchema);
+export interface IComment {
+  text: string;
+  createdAt: Date;
+  edited: boolean;
+  author: mongoose.Schema.Types.ObjectId;
+  authorName: string;
+  authorImage: string;
+  post: mongoose.Schema.Types.ObjectId;
+  likes: mongoose.Schema.Types.ObjectId[];
+  likesCount: number;
+}
+
+const Comment =
+  mongoose.models.Comment || mongoose.model('Comment', CommentSchema);
 
 export default Comment;

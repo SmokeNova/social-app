@@ -7,6 +7,7 @@ import Tags from './Tags';
 import Tag from './Tag';
 import Posts from './Posts';
 import UserContextProvider, { useUser } from './UserContextProvider';
+import CommentModal from './CommentModal';
 
 export {
   Provider,
@@ -19,4 +20,5 @@ export {
   Tag,
   UserContextProvider,
   useUser,
+  CommentModal,
 };
