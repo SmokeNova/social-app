@@ -26,12 +26,7 @@ const PostSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment",
-    },
-  ],
+  commentsCount: Number,
 });
 
 export interface IPost {
@@ -45,7 +40,7 @@ export interface IPost {
   creatorName: string;
   likes: mongoose.Schema.Types.ObjectId[];
   likesCount: number;
-  comments: mongoose.Schema.Types.ObjectId[];
+  commentsCount: number,
   createdAt: Date;
   updatedAt: Date;
   hasLiked: boolean;

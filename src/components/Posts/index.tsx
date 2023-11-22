@@ -1,11 +1,14 @@
-'use server'
+'use client';
 
 import { IPost } from '@/lib/models/post.model';
 import Post from '../Post';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Separator } from '../ui/separator';
+import { getPostsStore } from '@/stores/postsStore';
+import { observer } from 'mobx-react-lite';
 
-export default async function Posts({ posts }: { posts: IPost[] }) {
+export default function Posts({ posts }: { posts: IPost[] }) {
+
   return (
     <div>
       <div className='border border-slate-800/20 rounded max-w-[1000px] w-1/2 mx-auto py-2 mt-10 mb-6'>
@@ -18,4 +21,4 @@ export default async function Posts({ posts }: { posts: IPost[] }) {
       </div>
     </div>
   );
-}
+};

@@ -10,9 +10,10 @@ type Props = {
   hasLiked: boolean;
   postId: string;
   likesCount: number;
+  commentsCount: number;
 };
 
-export default function PostActions({ hasLiked, postId, likesCount }: Props) {
+export default function PostActions({ hasLiked, postId, likesCount, commentsCount }: Props) {
   const { toast } = useToast();
   const { id: userId } = useUser();
   const [optimisticLikes, addOptimisticLike] = useOptimistic(
@@ -40,24 +41,23 @@ export default function PostActions({ hasLiked, postId, likesCount }: Props) {
 
   return (
     <div className='self-center flex items-center gap-3'>
-      <form>
-        <button
-          type='button'
-          className='outline-none border-none p-3 rounded-full bg-transparent hover:bg-rose-400/40 disabled:invisible inline-flex gap-1 items-center'
-          onClick={() => handleLike()}
-        >
-          <HeartIcon
-            className={`w-5 h-5 stroke-slate-500 hover:stroke-rose-400 ${
-              optimisticLikes.hasLiked && '!stroke-rose-400 fill-rose-400'
-            }`}
-          />
-          {optimisticLikes.likesCount}
-        </button>
+      <button
+        type='button'
+        className='outline-none border-none p-3 rounded-full bg-transparent hover:bg-rose-400/40 disabled:invisible inline-flex gap-1 items-center'
+        onClick={() => handleLike()}
+      >
+        <HeartIcon
+          className={`w-5 h-5 stroke-slate-500 hover:stroke-rose-400 ${
+            optimisticLikes.hasLiked && '!stroke-rose-400 fill-rose-400'
+          }`}
+        />
+        {optimisticLikes.likesCount}
+      </button>
 
-        <CommentModal>
-          <MessageCircleIcon className='w-5 h-5 stroke-slate-500 hover:stroke-cyan-600' />
-        </CommentModal>
-      </form>
+      <CommentModal triggerStyles='outline-none border-none p-3 rounded-full bg-transparent hover:bg-cyan-600/20 inline-flex gap-1 items-center' postId={postId}>
+        <MessageCircleIcon className='w-5 h-5 stroke-slate-500 hover:stroke-cyan-600' />
+        {commentsCount}
+      </CommentModal>
     </div>
   );
 }

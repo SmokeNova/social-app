@@ -11,3 +11,7 @@ export const postSchema = z.object({
     .min(1, { message: "At least one tag is required" })
     .max(5, { message: "Only 5 tags are allowed!" }),
 });
+
+export const commentValidation = z.object({
+  text: z.string().min(4, {message: 'Should be at least 4 characters'}).max(450, {message: 'Too long'})
+})

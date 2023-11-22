@@ -24,6 +24,7 @@ const CommentSchema = new mongoose.Schema({
 });
 
 export interface IComment {
+  _id: mongoose.Schema.Types.ObjectId;
   text: string;
   createdAt: Date;
   edited: boolean;

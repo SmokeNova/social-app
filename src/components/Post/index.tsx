@@ -1,4 +1,4 @@
-'use server';
+'use client';
 
 import { IPost } from '@/lib/models/post.model';
 import Link from 'next/link';
@@ -58,6 +58,7 @@ export default async function Post({ post }: { post: IPost }) {
 
       <PostActions
         likesCount={post.likesCount}
+        commentsCount={post.commentsCount}
         postId={post._id.toString()}
         hasLiked={post.hasLiked}
       />

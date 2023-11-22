@@ -6,6 +6,7 @@ import User from '../models/user.model';
 import { connectToDB } from '../mongoose';
 import { postSchema } from '../validations/post';
 import * as z from 'zod';
+import Comment from '../models/comment.model';
 
 export async function createPost(data: any) {
   try {
@@ -66,3 +67,34 @@ export async function likePost({
     return { success: false };
   }
 }
+
+export const commentOnPost = async ({
+  postId,
+  text,
+  user,
+}: {
+  postId: string;
+  text: string;
+  user: IUser;
+}) => {
+  try {
+    await connectToDB();
+    const comment = await Comment.create({
+      text,
+      edited: false,
+      author: user.id,
+      authorName: user.username,
+      authorImage: user.image,
+      post: postId,
+      likesCount: 0,
+    });
+    if (!comment) throw new Error('Something went wrong!');
+    await Post.updateOne({ _id: postId }, { $inc: { commentsCount: 1 } });
+    console.log('comment created.');
+    revalidatePath('/p/profile');
+    return { success: true };
+  } catch (error) {
+    console.log(error);
+    return { success: false };
+  }
+};
